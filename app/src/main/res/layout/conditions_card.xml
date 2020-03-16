@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <variable name="viewHolder" type="com.example.weather.ConditionsFragment.ConditionsAdapter.ViewHolder"/>
+        <variable name="viewModel" type="com.example.weather.DetailedConditionsViewModel"/>
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/conditionsCard"
+        style="@style/Widget.MaterialComponents.CardView"
+        app:strokeWidth="1dp"
+        app:strokeColor="@color/primaryDarkColor"
+        app:cardBackgroundColor="@{context.getColor(viewModel.details.backgroundColor)}"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:onClick="@{viewHolder::onClick}">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/centerGuideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6"/>
+
+            <TextView
+                android:id="@+id/title"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/centerGuideline"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="this is a really long title used to test wrapping"
+                android:text="@{viewModel.details.title}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.title) ? View.GONE : View.VISIBLE}"/>
+
+            <LinearLayout
+                android:id="@+id/temperatureLayout"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.temperature) ? View.GONE : View.VISIBLE}">
+
+                <TextView
+                    android:id="@+id/temperatureLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.details.temperatureLabel}"
+                    tools:text="Hi" />
+
+                <TextView
+                    android:id="@+id/temperature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.details.temperature}"
+                    tools:text="90F" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@id/temperatureLayout"
+                android:text="@{viewModel.details.wind}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.wind) ? View.GONE : View.VISIBLE}"
+                tools:text="wind"/>
+
+            <TextView
+                android:id="@+id/windGust"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/wind"
+                android:text="@{viewModel.details.windGust}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.windGust) ? View.GONE : View.VISIBLE}"
+                tools:text="windGust" />
+
+            <TextView
+                android:id="@+id/dewPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/windGust"
+                android:text="@{viewModel.details.dewPoint}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.dewPoint) ? View.GONE : View.VISIBLE}"
+                tools:text="dewPoint" />
+
+            <TextView
+                android:id="@+id/relativeHumidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/dewPoint"
+                android:text="@{viewModel.details.relativeHumidity}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.relativeHumidity) ? View.GONE : View.VISIBLE}"
+                tools:text="relativeHumidity" />
+
+            <TextView
+                android:id="@+id/shortDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/centerGuideline"
+                app:layout_constraintTop_toBottomOf="@id/relativeHumidity"
+                app:layout_constrainedWidth="true"
+                android:text="@{viewModel.details.shortDescription}"
+                android:visibility="@{TextUtils.isEmpty(viewModel.details.shortDescription) ? View.GONE : View.VISIBLE}"
+                tools:text="shortDescription"/>
+
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                tools:layout_height="100dp"
+                tools:layout_width="100dp"
+                app:layout_constraintStart_toStartOf="@id/centerGuideline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:contentDescription="@string/icon"
+                android:visibility="@{viewModel.details.icon.equals(null) ? View.GONE : View.VISIBLE}"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

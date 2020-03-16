@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <variable name="fragment" type="com.example.weather.DetailedConditionsFragment"/>
+        <variable name="viewModel" type="com.example.weather.DetailedConditionsViewModel"/>
+    </data>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/conditionsCard"
+            style="@style/Widget.MaterialComponents.CardView"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/primaryDarkColor"
+            app:cardBackgroundColor="@{context.getColor(viewModel.details.backgroundColor)}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            android:padding="8dp">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:onClick="@{fragment::onClick}"
+                >
+
+                <TextView
+                    android:id="@+id/title"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/icon"
+                    tools:text="this is a really long title used to test wrapping"
+                    android:text="@{viewModel.details.title}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.title) ? View.GONE : View.VISIBLE}"/>
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    tools:layout_height="150dp"
+                    tools:layout_width="150dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title"
+                    app:layout_constraintBottom_toTopOf="@id/temperatureLayout"
+                    android:contentDescription="@string/icon"
+                    android:visibility="@{viewModel.details.icon.equals(null) ? View.GONE : View.VISIBLE}"/>
+
+                <LinearLayout
+                    android:id="@+id/temperatureLayout"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/icon"
+                    app:layout_constraintBottom_toTopOf="@id/wind"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.temperature) ? View.GONE : View.VISIBLE}">
+
+                    <TextView
+                        android:id="@+id/temperatureLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.details.temperatureLabel}"
+                        tools:text="Hi" />
+
+                    <TextView
+                        android:id="@+id/temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.details.temperature}"
+                        tools:text="90F" />
+
+                    <TextView
+                        android:id="@+id/temperatureTrend"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.details.temperatureTrend}"
+                        android:visibility="@{TextUtils.isEmpty(viewModel.details.temperatureTrend) ? View.GONE : View.VISIBLE}"
+                        tools:text="temperatureTrend"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/wind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/temperatureLayout"
+                    app:layout_constraintBottom_toTopOf="@id/windGust"
+                    android:text="@{viewModel.details.wind}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.wind) ? View.GONE : View.VISIBLE}"
+                    tools:text="wind"/>
+
+                <TextView
+                    android:id="@+id/windGust"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/wind"
+                    app:layout_constraintBottom_toTopOf="@id/windChill"
+                    android:text="@{viewModel.details.windGust}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.windGust) ? View.GONE : View.VISIBLE}"
+                    tools:text="windGust" />
+
+                <TextView
+                    android:id="@+id/windChill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/windGust"
+                    app:layout_constraintBottom_toTopOf="@id/heatIndex"
+                    android:text="@{viewModel.details.windChill}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.windChill) ? View.GONE : View.VISIBLE}"
+                    tools:text="windGust" />
+
+                <TextView
+                    android:id="@+id/heatIndex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/windChill"
+                    app:layout_constraintBottom_toTopOf="@id/dewPoint"
+                    android:text="@{viewModel.details.heatIndex}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.heatIndex) ? View.GONE : View.VISIBLE}"
+                    tools:text="windGust" />
+
+                <TextView
+                    android:id="@+id/dewPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/heatIndex"
+                    app:layout_constraintBottom_toTopOf="@id/relativeHumidity"
+                    android:text="@{viewModel.details.dewPoint}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.dewPoint) ? View.GONE : View.VISIBLE}"
+                    tools:text="dewPoint" />
+
+                <TextView
+                    android:id="@+id/relativeHumidity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/dewPoint"
+                    app:layout_constraintBottom_toTopOf="@id/shortDescription"
+                    android:text="@{viewModel.details.relativeHumidity}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.relativeHumidity) ? View.GONE : View.VISIBLE}"
+                    tools:text="relativeHumidity" />
+
+                <TextView
+                    android:id="@+id/shortDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/relativeHumidity"
+                    app:layout_constraintBottom_toTopOf="@id/visibility"
+                    android:text="@{viewModel.details.shortDescription}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.shortDescription) ? View.GONE : View.VISIBLE}"
+                    tools:text="shortDescription"/>
+
+                <TextView
+                    android:id="@+id/visibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/shortDescription"
+                    app:layout_constraintBottom_toTopOf="@id/pressure"
+                    android:text="@{viewModel.details.visibility}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.visibility) ? View.GONE : View.VISIBLE}"
+                    tools:text="visibility"/>
+
+                <TextView
+                    android:id="@+id/pressure"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/visibility"
+                    app:layout_constraintBottom_toTopOf="@id/detailedDescription"
+                    android:text="@{viewModel.details.pressure}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.pressure) ? View.GONE : View.VISIBLE}"
+                    tools:text="pressure"/>
+
+                <TextView
+                    android:id="@+id/detailedDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/pressure"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@{viewModel.details.detailedDescription}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.details.detailedDescription) ? View.GONE : View.VISIBLE}"
+                    tools:text="detailedDescription"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.core.widget.NestedScrollView>
+        </com.google.android.material.card.MaterialCardView>
+
+</layout>
