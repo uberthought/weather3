@@ -1,5 +1,6 @@
 package com.example.weather
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,17 +25,14 @@ import kotlinx.android.synthetic.main.main_activity.*
 class ConditionsFragment: Fragment() {
     private val logTag = javaClass.kotlin.simpleName
 
-    private lateinit var locationViewModel: LocationViewModel
     private lateinit var conditionsViewModel: ConditionsViewModel
     private lateinit var forecastViewModel: ForecastViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        locationViewModel = ViewModelProvider(this)[LocationViewModel::class.java]
         conditionsViewModel = ViewModelProvider(this)[ConditionsViewModel::class.java]
         forecastViewModel = ViewModelProvider(this)[ForecastViewModel::class.java]
         val binding = ConditionsFragmentBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
-        binding.locationViewModel = locationViewModel
         binding.conditionsViewModel = conditionsViewModel
 
         val recyclerView = binding.root.recyclerView as RecyclerView
@@ -44,9 +42,14 @@ class ConditionsFragment: Fragment() {
         val adapter = ConditionsAdapter()
         recyclerView.adapter = adapter
 
-        locationViewModel.location.observe(viewLifecycleOwner, Observer { location.invalidate() })
         conditionsViewModel.details.observe(viewLifecycleOwner, Observer { adapter.notifyDataSetChanged() })
         forecastViewModel.forecasts.observe(viewLifecycleOwner, Observer { adapter.notifyDataSetChanged() })
+
+//        activity?.supportFragmentManager?.findFragmentByTag("PortraitDetailedConditionsFragment")?.let {
+//            if (!it.isDetached)
+//                activity?.onBackPressed()
+//        }
+
 
         return binding.root
     }

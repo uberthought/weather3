@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <import type="android.view.View"/>
+        <import type="android.text.TextUtils"/>
+        <variable name="locationViewModel" type="com.example.weather.LocationViewModel"/>
+        <variable name="conditionsViewModel" type="com.example.weather.ConditionsViewModel"/>
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainPortraitFragment"
         android:layout_width="match_parent"
@@ -10,16 +17,44 @@
         android:background="@color/primaryLightColor"
         android:padding="8dp">
 
+        <TextView
+            android:id="@+id/location"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/conditionsFragment"
+            android:text="@{locationViewModel.location}"
+            android:visibility="@{TextUtils.isEmpty(locationViewModel.location) ? View.GONE : View.VISIBLE}"
+            tools:text="Location"/>
+
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/conditionsFragment"
             android:name="com.example.weather.ConditionsFragment"
             android:tag="PortraitConditionsFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintRight_toLeftOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/location"
+            app:layout_constraintBottom_toTopOf="@id/timestamp"
+            app:layout_constrainedWidth="true"
+            app:layout_constrainedHeight="true"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/conditionsFragment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{conditionsViewModel.timestamp}"
+            android:visibility="@{TextUtils.isEmpty(conditionsViewModel.timestamp) ? View.GONE : View.VISIBLE}"
+            tools:text="timestamp"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/startGuideline"

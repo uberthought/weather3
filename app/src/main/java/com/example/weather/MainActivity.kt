@@ -3,17 +3,20 @@ package com.example.weather
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.concurrent.futures.CallbackToFutureAdapter
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
 import com.example.weather.Services.NWSService
+import com.example.weather.databinding.MainActivityBinding
 import com.google.android.gms.location.*
 import com.google.common.util.concurrent.ListenableFuture
+import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -25,6 +28,9 @@ import java.util.concurrent.TimeUnit
 class MainActivity : FragmentActivity() {
     private val logTag = javaClass.kotlin.simpleName
 
+    lateinit var locationViewModel: LocationViewModel
+    lateinit var conditionsViewModel:ConditionsViewModel
+
     companion object {
         const val LOCATION_REQUEST: Int = 1
     }
@@ -34,22 +40,18 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.main_activity)
+//        setContentView(R.layout.main_activity)
 
-//        if (savedInstanceState == null) {
-//            val fragment = SideBySideFragment()
-////            val fragment = SingleFragment()
-//            supportFragmentManager.beginTransaction()
-//                .add(R.id.mainFragment, fragment)
-//                .commit()
-//        }
+        var binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
 
-        applicationContext?.resources?.displayMetrics?.let {
-            val dpHeight = it.heightPixels / it.density
-            val dpWidth = it.widthPixels / it.density
+        locationViewModel = ViewModelProvider(this)[LocationViewModel::class.java]
+        conditionsViewModel = ViewModelProvider(this)[ConditionsViewModel::class.java]
+        binding.lifecycleOwner = this
+        binding.locationViewModel = locationViewModel
+        binding.conditionsViewModel = conditionsViewModel
 
-            Log.d(logTag, "dpHeight=$dpHeight, dpWidth=$dpWidth")
-        }
+        locationViewModel.location.observe(this, androidx.lifecycle.Observer { location.invalidate() })
+        conditionsViewModel.details.observe(this, androidx.lifecycle.Observer { timestamp.invalidate() })
 
         // location
 
