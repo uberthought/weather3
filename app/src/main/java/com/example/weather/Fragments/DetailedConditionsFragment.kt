@@ -1,23 +1,17 @@
 package com.example.weather
 
-import android.app.ActionBar
-import android.content.res.TypedArray
+import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.Dimension
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.example.weather.Services.FileCachingService
 import com.example.weather.databinding.DetailedConditionsFragmentBinding
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.detailed_conditions_fragment.view.*
 
 class DetailedConditionsFragment : Fragment() {
     private val logTag = javaClass.kotlin.simpleName
@@ -47,8 +41,14 @@ class DetailedConditionsFragment : Fragment() {
 
         viewModel.details.observe(viewLifecycleOwner, Observer {
             binding.invalidateAll()
-            if (viewModel.details.value?.icon != null)
-                Picasso.get().load(viewModel.details.value?.icon).into(binding.icon)
+
+            val iconUrl = viewModel.details.value?.icon?.replace("medium", resources.getString(R.string.smallIconSize))
+            iconUrl?.let {
+                FileCachingService.instance.getCachedFile(it, context).observe(viewLifecycleOwner, Observer { path ->
+                    val bitmap = BitmapFactory.decodeFile(path)
+                    binding.icon.setImageBitmap(bitmap)
+                })
+            }
         })
 
         return binding.root
@@ -72,7 +72,7 @@ class DetailedConditionsFragment : Fragment() {
                 }
                 connect(R.id.conditionsCard, ConstraintLayout.LayoutParams.TOP, ConstraintLayout.LayoutParams.PARENT_ID, ConstraintLayout.LayoutParams.TOP)
                 connect(R.id.conditionsCard, ConstraintLayout.LayoutParams.BOTTOM, ConstraintLayout.LayoutParams.PARENT_ID, ConstraintLayout.LayoutParams.BOTTOM)
-                applyTo(it);
+                applyTo(it)
             }
         }
     }

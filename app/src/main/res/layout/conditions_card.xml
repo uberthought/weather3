@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:padding="@dimen/padding">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/centerGuideline"
@@ -34,7 +34,8 @@
 
             <TextView
                 android:id="@+id/title"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:textStyle="bold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -128,10 +129,10 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                tools:layout_height="100dp"
-                tools:layout_width="100dp"
+                android:layout_width="@dimen/smallIcon"
+                android:layout_height="@dimen/smallIcon"
+                tools:layout_height="@dimen/smallIcon"
+                tools:layout_width="@dimen/smallIcon"
                 app:layout_constraintStart_toStartOf="@id/centerGuideline"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

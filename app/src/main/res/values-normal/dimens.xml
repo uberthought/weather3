@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    56, 86, 134-->
+    <dimen name="smallIcon">75dp</dimen>
+    <dimen name="largeIcon">100dp</dimen>
+    <string name="smallIconSize">small</string>
+    <string name="largeIconSize">medium</string>
+    <dimen name="padding">4dp</dimen>
+</resources>

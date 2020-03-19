@@ -37,13 +37,14 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
+                android:padding="@dimen/padding"
                 android:onClick="@{fragment::onClick}"
                 >
 
                 <TextView
                     android:id="@+id/title"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:textStyle="bold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,10 +57,10 @@
 
                 <ImageView
                     android:id="@+id/icon"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"
-                    tools:layout_height="150dp"
-                    tools:layout_width="150dp"
+                    android:layout_width="@dimen/largeIcon"
+                    android:layout_height="@dimen/largeIcon"
+                    tools:layout_height="@dimen/largeIcon"
+                    tools:layout_width="@dimen/largeIcon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/title"

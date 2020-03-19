@@ -1,26 +1,23 @@
 package com.example.weather
 
-import android.content.res.Configuration
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.weather.Services.FileCachingService
 import com.example.weather.databinding.ConditionsCardBinding
 import com.example.weather.databinding.ConditionsCardBinding.inflate
 import com.example.weather.databinding.ConditionsFragmentBinding
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.conditions_fragment.*
 import kotlinx.android.synthetic.main.conditions_fragment.view.*
-import kotlinx.android.synthetic.main.main_activity.*
 
 class ConditionsFragment: Fragment() {
     private val logTag = javaClass.kotlin.simpleName
@@ -45,10 +42,14 @@ class ConditionsFragment: Fragment() {
         conditionsViewModel.details.observe(viewLifecycleOwner, Observer { adapter.notifyDataSetChanged() })
         forecastViewModel.forecasts.observe(viewLifecycleOwner, Observer { adapter.notifyDataSetChanged() })
 
-//        activity?.supportFragmentManager?.findFragmentByTag("PortraitDetailedConditionsFragment")?.let {
-//            if (!it.isDetached)
-//                activity?.onBackPressed()
-//        }
+        activity?.supportFragmentManager?.findFragmentByTag("PortraitDetailedConditionsFragment")?.let {
+            val manager = activity!!.supportFragmentManager
+            val transaction = manager.beginTransaction()
+            transaction.remove(it)
+            transaction.commit()
+            manager.popBackStack()
+        }
+
 
 
         return binding.root
@@ -97,8 +98,13 @@ class ConditionsFragment: Fragment() {
                 binding.viewModel = viewModel
                 binding.viewHolder = this
 
-                if (details.icon != null)
-                    Picasso.get().load(details.icon!!).into(binding.icon)
+                val iconUrl = details.icon?.replace("medium", resources.getString(R.string.smallIconSize))
+                iconUrl?.let {
+                    FileCachingService.instance.getCachedFile(it, context).observe(viewLifecycleOwner, Observer { path ->
+                        val bitmap = BitmapFactory.decodeFile(path)
+                        binding.icon.setImageBitmap(bitmap)
+                    })
+                }
             }
 
             fun onClick(view:View) {

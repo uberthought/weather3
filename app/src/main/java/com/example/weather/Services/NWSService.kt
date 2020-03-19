@@ -2,6 +2,8 @@ package com.example.weather.Services
 
 import android.annotation.SuppressLint
 import android.location.Location
+import android.location.LocationManager
+import android.location.LocationProvider
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
@@ -16,7 +18,7 @@ import java.util.*
 class NWSService {
     private val logTag = javaClass.kotlin.simpleName
 
-    companion object Mutex {
+    companion object {
         val instance = NWSService()
 
         val mutex = Mutex()
@@ -63,6 +65,14 @@ class NWSService {
     var conditions: MutableLiveData<Conditions> = MutableLiveData()
     var forecasts: MutableLiveData<List<Forecast>> = MutableLiveData()
 
+    init {
+        if (lastLocation == null) {
+            lastLocation = Location("")
+            lastLocation!!.latitude = 27.9585274
+            lastLocation!!.longitude = -82.7886386
+        }
+    }
+
     fun setLocation(location: Location) {
         Log.d(logTag, "got update from location service")
         if (lastLocation == null || lastLocation!!.distanceTo(location) > 100  ) {
@@ -73,7 +83,7 @@ class NWSService {
             GlobalScope.launch { refresh() }
         }
         else
-            Log.d(logTag, "not refreshing since the location changes bt at less than 100m")
+            Log.d(logTag, "not refreshing since the location changes by at less than 100m")
 
     }
 
@@ -85,7 +95,7 @@ class NWSService {
             if (duration > 1000 * 60 * refreshInterval) {
                 timestamp = Date().time
                 if ((lastLocation != null)) {
-                    Log.d(logTag, "starting NWS refresh")
+                    Log.d(logTag, "starting refresh")
                     getStation()
                     getConditions()
                     getForecast()

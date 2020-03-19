@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryLightColor"
-        android:padding="8dp">
+        android:padding="@dimen/padding">
 
         <TextView
             android:id="@+id/location"
@@ -25,10 +25,13 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/conditionsFragment"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textStyle="bold"
             android:text="@{locationViewModel.location}"
             android:visibility="@{TextUtils.isEmpty(locationViewModel.location) ? View.GONE : View.VISIBLE}"
-            tools:text="Location"/>
+            tools:text="Location"
+            android:includeFontPadding="false"
+            />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/centerGuideline"
@@ -49,7 +52,7 @@
             app:layout_constraintBottom_toTopOf="@id/timestamp"
             app:layout_constrainedWidth="true"
             app:layout_constrainedHeight="true"
-            android:padding="8dp"
+            android:padding="@dimen/padding"
             />
 
         <androidx.fragment.app.FragmentContainerView
@@ -64,7 +67,7 @@
             app:layout_constraintBottom_toTopOf="@id/timestamp"
             app:layout_constrainedWidth="true"
             app:layout_constrainedHeight="true"
-            android:padding="8dp"
+            android:padding="@dimen/padding"
             />
 
         <TextView
@@ -77,6 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@{conditionsViewModel.timestamp}"
             android:visibility="@{TextUtils.isEmpty(conditionsViewModel.timestamp) ? View.GONE : View.VISIBLE}"
+            android:includeFontPadding="false"
             tools:text="timestamp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
