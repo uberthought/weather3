@@ -2,8 +2,6 @@ package com.example.weather.Services
 
 import android.annotation.SuppressLint
 import android.location.Location
-import android.location.LocationManager
-import android.location.LocationProvider
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson

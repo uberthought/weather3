@@ -18,10 +18,6 @@ class DetailedConditionsFragment : Fragment() {
 
     private lateinit var viewModel: DetailedConditionsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = ViewModelProvider(this)[DetailedConditionsViewModel::class.java]
 

@@ -42,13 +42,13 @@ class NWSPoints {
         val properties : Properties
     )
 
-    data class Bearing (
-        val value : Double?,
-        val unitCode : String
-    )
-
-    data class Distance (
-        val value : Double?,
-        val unitCode : String
-    )
+//    data class Bearing (
+//        val value : Double?,
+//        val unitCode : String
+//    )
+//
+//    data class Distance (
+//        val value : Double?,
+//        val unitCode : String
+//    )
 }

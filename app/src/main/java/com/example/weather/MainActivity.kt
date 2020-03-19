@@ -47,10 +47,9 @@ class MainActivity : FragmentActivity() {
 
         // debugging
         with (DisplayMetrics()) {
-            val  metrics  = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(metrics)
-            val width = metrics.widthPixels/metrics.density
-            val height = metrics.heightPixels/metrics.density
+            windowManager.defaultDisplay.getMetrics(this)
+            val width = this.widthPixels/this.density
+            val height = this.heightPixels/this.density
             Log.d(logTag, "width = ${width}dp height = ${height}dp")
         }
         with (when (resources.configuration.screenLayout and android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK) {
@@ -138,7 +137,7 @@ class MainActivity : FragmentActivity() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult?.let {
                         Log.d(logTag, "location got location ${it.locations[0].latitude},${it.locations[0].longitude}")
-                        locationResult.locations.map { NWSService.instance.setLocation(it)
+                        locationResult.locations.map { location -> NWSService.instance.setLocation(location)
                         }
                     }
                 }
