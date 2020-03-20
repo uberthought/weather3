@@ -15,10 +15,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
+import com.example.weather.Services.LogService
 import com.example.weather.Services.NWSService
 import com.example.weather.databinding.MainActivityBinding
 import com.google.android.gms.location.*
 import com.google.common.util.concurrent.ListenableFuture
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -28,7 +30,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : FragmentActivity() {
-    private val logTag = javaClass.kotlin.simpleName
+    private val logTag = javaClass.kotlin.simpleName!!
 
     lateinit var locationViewModel: LocationViewModel
     lateinit var conditionsViewModel: ConditionsViewModel
@@ -42,15 +44,16 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(logTag, "onCreate")
-
+        LogService.update(this)
 
         // debugging
+        val logService = LogService()
         with (DisplayMetrics()) {
             windowManager.defaultDisplay.getMetrics(this)
             val width = this.widthPixels/this.density
             val height = this.heightPixels/this.density
-            Log.d(logTag, "width = ${width}dp height = ${height}dp")
+            logService.add("screen_width",  "${width}dp")
+            logService.add("screen_height",  "${height}dp")
         }
         with (when (resources.configuration.screenLayout and android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK) {
             android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE -> "xlarge"
@@ -59,13 +62,16 @@ class MainActivity : FragmentActivity() {
             android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL -> "small"
             android.content.res.Configuration.SCREENLAYOUT_SIZE_UNDEFINED -> "undefined"
             else -> "unknown"
-        }) { Log.d(logTag, "screenSize = $this") }
+        }) {
+            logService.add("screen_size", this)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             with (getSystemService(StorageManager::class.java) as StorageManager) {
                 val quota = getCacheQuotaBytes(getUuidForPath(applicationContext.cacheDir))/1024/1024
                 val allocated = getAllocatableBytes(getUuidForPath(applicationContext.cacheDir))/1024/1024
-              Log.d(logTag, "cache quota = ${quota}mb allocated = ${allocated}mb")
+                logService.add("cache_quota", "${quota}mb")
+                logService.add("cache_allocated", "${allocated}mb")
             }
 
         val binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
@@ -90,10 +96,10 @@ class MainActivity : FragmentActivity() {
                 .setRequiresBatteryNotLow(true)
                 .build()
 
-        Log.d(logTag, "forecast refresh = ${RefreshService.refreshInterval} minutes")
+        logService.add("refresh_forecast", "interval ${RefreshService.refreshInterval} minutes")
         val refreshWorkRequest = PeriodicWorkRequest.Builder(RefreshService::class.java, RefreshService.refreshInterval, TimeUnit.MINUTES)
-                .setConstraints(constrains)
-                .build()
+            .setConstraints(constrains)
+            .build()
         WorkManager.getInstance(applicationContext).enqueue(refreshWorkRequest)
     }
 
@@ -106,20 +112,21 @@ class MainActivity : FragmentActivity() {
         val interval: Long = 1000 * 60 * 15
         val fastestInterval: Long = 1000 * 60 * 5
 
+        val logService = LogService()
         with(granularity.map {
             when(it) {
                 Manifest.permission.ACCESS_FINE_LOCATION -> "fine_location"
                 Manifest.permission.ACCESS_COARSE_LOCATION-> "course_location"
                 else -> it
             }
-        }) { Log.d(logTag, "location granularity = $this") }
+        }) { logService.add("location_granularity", "$this") }
 
         with(when(priority) {
             LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY -> "balanced"
             else -> "$priority"
-        }) { Log.d(logTag, "location priority = $this") }
+        }) { logService.add("location_priority", this) }
 
-        Log.d(logTag, "location refresh = ${interval/1000/60} minutes")
+        logService.add("location_refresh", "${interval/1000/60} minutes")
 
 
         if (granularity.any { l -> ActivityCompat.checkSelfPermission(applicationContext, l) != PackageManager.PERMISSION_GRANTED })
@@ -136,7 +143,7 @@ class MainActivity : FragmentActivity() {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     locationResult?.let {
-                        Log.d(logTag, "location got location ${it.locations[0].latitude},${it.locations[0].longitude}")
+                        LogService().add("location", "${it.locations[0].latitude},${it.locations[0].longitude}")
                         locationResult.locations.map { location -> NWSService.instance.setLocation(location)
                         }
                     }
@@ -151,12 +158,10 @@ class MainActivity : FragmentActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             LOCATION_REQUEST -> {
-                Log.d(logTag, "location got user permission")
+                LogService().add("location", "got user permission")
                 requestLocationUpdates()
             }
-            else -> {
-                Log.d(logTag, "location failed to get user permission")
-            }
+            else ->  LogService().add("location", "failed to get user permission")
         }
     }
 
@@ -176,10 +181,10 @@ class MainActivity : FragmentActivity() {
                         val duration = (Date().time - timestamp) / 1000.0
                         if (duration > 60 * 5) {
                             timestamp = Date().time
-                            Log.d(logTag, "forecast refresh duration = $duration seconds")
+                            LogService().add("refresh_forecast", " after $duration seconds")
                             GlobalScope.launch { NWSService.instance.refresh() }
                         } else
-                            Log.d(logTag, "forecast refresh too soon duration = $duration seconds")
+                            LogService().add("refresh_forecast", " after $duration seconds (too soon)")
 
                         resolver.set(Result.success())
                     }
