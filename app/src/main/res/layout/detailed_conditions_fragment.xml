@@ -6,8 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="fragment" type="com.example.weather.DetailedConditionsFragment"/>
-        <variable name="viewModel" type="com.example.weather.DetailedConditionsViewModel"/>
+        <variable name="fragment" type="com.example.weather.fragments.DetailedConditionsFragment"/>
+        <variable name="viewModel" type="com.example.weather.viewModels.DetailedConditionsViewModel"/>
     </data>
 
         <com.google.android.material.card.MaterialCardView

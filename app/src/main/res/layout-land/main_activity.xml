@@ -6,8 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="locationViewModel" type="com.example.weather.LocationViewModel"/>
-        <variable name="conditionsViewModel" type="com.example.weather.ConditionsViewModel"/>
+        <variable name="locationViewModel" type="com.example.weather.viewModels.LocationViewModel"/>
+        <variable name="conditionsViewModel" type="com.example.weather.viewModels.ConditionsViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +42,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/conditionsFragment"
-            android:name="com.example.weather.ConditionsFragment"
+            android:name="com.example.weather.fragments.ConditionsFragment"
             android:tag="LandscapeConditionsFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -57,7 +57,7 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/detailedConditionsFragment"
-            android:name="com.example.weather.DetailedConditionsFragment"
+            android:name="com.example.weather.fragments.DetailedConditionsFragment"
             android:tag="LandscapeDetailedConditionsFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"

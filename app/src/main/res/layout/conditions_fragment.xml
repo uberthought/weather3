@@ -5,8 +5,8 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="locationViewModel" type="com.example.weather.LocationViewModel"/>
-        <variable name="conditionsViewModel" type="com.example.weather.ConditionsViewModel"/>
+        <variable name="locationViewModel" type="com.example.weather.viewModels.LocationViewModel"/>
+        <variable name="conditionsViewModel" type="com.example.weather.viewModels.ConditionsViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

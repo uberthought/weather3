@@ -1,8 +1,8 @@
-package com.example.weather
+package com.example.weather.viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weather.Services.NWSService
+import com.example.weather.services.NWSService
 import java.text.SimpleDateFormat
 
 class ConditionsViewModel : ViewModel() {
@@ -12,7 +12,8 @@ class ConditionsViewModel : ViewModel() {
     init { NWSService.instance.conditions.observeForever { conditions -> onConditionsChanged(conditions) } }
 
     private fun onConditionsChanged(conditions: NWSService.Conditions) {
-        this.details.postValue(DetailedConditionsViewModel.Details(
+        this.details.postValue(
+            DetailedConditionsViewModel.Details(
             title = "Current Conditions",
             dewPoint = conditions.dewPoint?.let { "Dew Point %.0f℉".format(conditions.dewPoint.toFahrenheit) },
             relativeHumidity = conditions.relativeHumidity?.let { "Humidity %.0f%%".format(conditions.relativeHumidity) },

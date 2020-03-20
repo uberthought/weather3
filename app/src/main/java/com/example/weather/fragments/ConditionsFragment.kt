@@ -1,4 +1,4 @@
-package com.example.weather
+package com.example.weather.fragments
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,10 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weather.Services.FileCachingService
+import com.example.weather.*
+import com.example.weather.services.FileCachingService
 import com.example.weather.databinding.ConditionsCardBinding
 import com.example.weather.databinding.ConditionsCardBinding.inflate
 import com.example.weather.databinding.ConditionsFragmentBinding
+import com.example.weather.viewModels.ConditionsViewModel
+import com.example.weather.viewModels.DetailedConditionsViewModel
+import com.example.weather.viewModels.ForecastViewModel
 import kotlinx.android.synthetic.main.conditions_fragment.view.*
 
 class ConditionsFragment: Fragment() {
@@ -47,8 +51,6 @@ class ConditionsFragment: Fragment() {
             transaction.commit()
             manager.popBackStack()
         }
-
-
 
         return binding.root
     }

@@ -3,24 +3,25 @@ package com.example.weather
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.storage.StorageManager
 import android.util.DisplayMetrics
-import android.util.Log
 import androidx.concurrent.futures.CallbackToFutureAdapter
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.work.*
-import com.example.weather.Services.LogService
-import com.example.weather.Services.NWSService
+import com.example.weather.services.LogService
+import com.example.weather.services.NWSService
 import com.example.weather.databinding.MainActivityBinding
+import com.example.weather.viewModels.ConditionsViewModel
+import com.example.weather.viewModels.LocationViewModel
 import com.google.android.gms.location.*
 import com.google.common.util.concurrent.ListenableFuture
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -46,69 +47,74 @@ class MainActivity : FragmentActivity() {
 
         LogService.update(this)
 
-        // debugging
-        val logService = LogService()
-        with (DisplayMetrics()) {
-            windowManager.defaultDisplay.getMetrics(this)
-            val width = this.widthPixels/this.density
-            val height = this.heightPixels/this.density
-            logService.add("screen_width",  "${width}dp")
-            logService.add("screen_height",  "${height}dp")
-        }
-        with (when (resources.configuration.screenLayout and android.content.res.Configuration.SCREENLAYOUT_SIZE_MASK) {
-            android.content.res.Configuration.SCREENLAYOUT_SIZE_XLARGE -> "xlarge"
-            android.content.res.Configuration.SCREENLAYOUT_SIZE_LARGE -> "large"
-            android.content.res.Configuration.SCREENLAYOUT_SIZE_NORMAL -> "normal"
-            android.content.res.Configuration.SCREENLAYOUT_SIZE_SMALL -> "small"
-            android.content.res.Configuration.SCREENLAYOUT_SIZE_UNDEFINED -> "undefined"
-            else -> "unknown"
-        }) {
-            logService.add("screen_size", this)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            with (getSystemService(StorageManager::class.java) as StorageManager) {
-                val quota = getCacheQuotaBytes(getUuidForPath(applicationContext.cacheDir))/1024/1024
-                val allocated = getAllocatableBytes(getUuidForPath(applicationContext.cacheDir))/1024/1024
-                logService.add("cache_quota", "${quota}mb")
-                logService.add("cache_allocated", "${allocated}mb")
-            }
-
         val binding = DataBindingUtil.setContentView<MainActivityBinding>(this, R.layout.main_activity)
-
         locationViewModel = ViewModelProvider(this)[LocationViewModel::class.java]
         conditionsViewModel = ViewModelProvider(this)[ConditionsViewModel::class.java]
         binding.lifecycleOwner = this
         binding.locationViewModel = locationViewModel
         binding.conditionsViewModel = conditionsViewModel
-
         locationViewModel.location.observe(this, androidx.lifecycle.Observer { location.invalidate() })
         conditionsViewModel.details.observe(this, androidx.lifecycle.Observer { timestamp.invalidate() })
 
-        // location
+        // debugging
+        logDeviceInfo()
 
         requestLocationUpdates()
 
-        // refresh timer
+        requestRefresh()
+    }
 
+    private fun requestRefresh() {
         val constrains = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .setRequiresBatteryNotLow(true)
-                .build()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
 
-        logService.add("refresh_forecast", "interval ${RefreshService.refreshInterval} minutes")
+        LogService().add("refresh_forecast", "interval ${RefreshService.refreshInterval} minutes")
         val refreshWorkRequest = PeriodicWorkRequest.Builder(RefreshService::class.java, RefreshService.refreshInterval, TimeUnit.MINUTES)
             .setConstraints(constrains)
             .build()
         WorkManager.getInstance(applicationContext).enqueue(refreshWorkRequest)
     }
 
+    private fun logDeviceInfo() {
+        val logService = LogService()
+        with(DisplayMetrics()) {
+            windowManager.defaultDisplay.getMetrics(this)
+            val width = this.widthPixels / this.density
+            val height = this.heightPixels / this.density
+            logService.add("screen_width", "${width}dp")
+            logService.add("screen_height", "${height}dp")
+        }
+        with(
+            when (resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) {
+                Configuration.SCREENLAYOUT_SIZE_XLARGE -> "xlarge"
+                Configuration.SCREENLAYOUT_SIZE_LARGE -> "large"
+                Configuration.SCREENLAYOUT_SIZE_NORMAL -> "normal"
+                Configuration.SCREENLAYOUT_SIZE_SMALL -> "small"
+                Configuration.SCREENLAYOUT_SIZE_UNDEFINED -> "undefined"
+                else -> "unknown"
+            }
+        ) {
+            logService.add("screen_size", this)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            with(getSystemService(StorageManager::class.java) as StorageManager) {
+                val quota = getCacheQuotaBytes(getUuidForPath(applicationContext.cacheDir)) / 1024 / 1024
+                val allocated = getAllocatableBytes(getUuidForPath(applicationContext.cacheDir)) / 1024 / 1024
+                logService.add("cache_quota", "${quota}mb")
+                logService.add("cache_allocated", "${allocated}mb")
+            }
+    }
+
     private fun requestLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(applicationContext)
 
-//        val granularity = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
-        val granularity = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
+        val granularity = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+//        val granularity = arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION)
         val priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+//        val priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         val interval: Long = 1000 * 60 * 15
         val fastestInterval: Long = 1000 * 60 * 5
 
@@ -122,17 +128,19 @@ class MainActivity : FragmentActivity() {
         }) { logService.add("location_granularity", "$this") }
 
         with(when(priority) {
-            LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY -> "balanced"
+            LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY -> "balanced accuracy"
+            LocationRequest.PRIORITY_HIGH_ACCURACY -> "high accuracy"
             else -> "$priority"
         }) { logService.add("location_priority", this) }
 
         logService.add("location_refresh", "${interval/1000/60} minutes")
 
-
         if (granularity.any { l -> ActivityCompat.checkSelfPermission(applicationContext, l) != PackageManager.PERMISSION_GRANTED })
             ActivityCompat.requestPermissions(this, granularity, LOCATION_REQUEST)
         else {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location -> location?.let { NWSService.instance.setLocation(location) } }
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                    location -> location?.let { NWSService.instance.setLocation(location) }
+            }
 
             val locationRequest = LocationRequest.create()?.apply {
                 this.interval = interval

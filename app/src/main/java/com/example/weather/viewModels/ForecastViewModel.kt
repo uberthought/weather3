@@ -1,8 +1,9 @@
-package com.example.weather
+package com.example.weather.viewModels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.weather.Services.NWSService
+import com.example.weather.R
+import com.example.weather.services.NWSService
 
 class ForecastViewModel : ViewModel() {
     val forecasts: MutableLiveData<List<DetailedConditionsViewModel.Details>> = MutableLiveData()

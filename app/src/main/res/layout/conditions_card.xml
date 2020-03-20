@@ -6,8 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="viewHolder" type="com.example.weather.ConditionsFragment.ConditionsAdapter.ViewHolder"/>
-        <variable name="viewModel" type="com.example.weather.DetailedConditionsViewModel"/>
+        <variable name="viewHolder" type="com.example.weather.fragments.ConditionsFragment.ConditionsAdapter.ViewHolder"/>
+        <variable name="viewModel" type="com.example.weather.viewModels.DetailedConditionsViewModel"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView

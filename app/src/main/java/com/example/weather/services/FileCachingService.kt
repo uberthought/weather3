@@ -1,4 +1,4 @@
-package com.example.weather.Services
+package com.example.weather.services
 
 import android.content.Context
 import android.util.Log
@@ -27,6 +27,7 @@ class FileCachingService   {
                 val cacheFile = File(cacheDir, fileName)
 
                 if (!cacheFile.exists()) {
+                    LogService().add("caching_file", cacheFile.absolutePath)
                     cacheFile.parent?.let { File(it).mkdirs() }
 
                     URL(link).openStream().use { input ->
@@ -36,12 +37,6 @@ class FileCachingService   {
                     }
                 }
                 data.postValue(cacheFile.path)
-                cacheFile.parent?.let {
-                    File(it).listFiles { name ->
-                        Log.d(logTag, "cached file $name")
-                        true
-                    }
-                }
             }
         return data
     }

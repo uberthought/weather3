@@ -1,4 +1,4 @@
-package com.example.weather
+package com.example.weather.fragments
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -10,7 +10,10 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.weather.Services.FileCachingService
+import com.example.weather.viewModels.ConditionsViewModel
+import com.example.weather.viewModels.DetailedConditionsViewModel
+import com.example.weather.R
+import com.example.weather.services.FileCachingService
 import com.example.weather.databinding.DetailedConditionsFragmentBinding
 
 class DetailedConditionsFragment : Fragment() {

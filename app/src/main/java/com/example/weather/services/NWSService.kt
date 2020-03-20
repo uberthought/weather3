@@ -1,9 +1,13 @@
-package com.example.weather.Services
+package com.example.weather.services
 
 import android.annotation.SuppressLint
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.example.weather.services.nws.NWSGridPointsForecast
+import com.example.weather.services.nws.NWSPoints
+import com.example.weather.services.nws.NWSPointsStations
+import com.example.weather.services.nws.NWSStationsObservations
 import com.google.gson.Gson
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -64,11 +68,11 @@ class NWSService {
     var forecasts: MutableLiveData<List<Forecast>> = MutableLiveData()
 
     init {
-        if (lastLocation == null) {
-            lastLocation = Location("")
-            lastLocation!!.latitude = 27.9585274
-            lastLocation!!.longitude = -82.7886386
-        }
+//        if (lastLocation == null) {
+//            lastLocation = Location("")
+//            lastLocation!!.latitude = 27.9585274
+//            lastLocation!!.longitude = -82.7886386
+//        }
     }
 
     fun setLocation(location: Location) {
