@@ -6,8 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="viewHolder" type="com.example.weather.fragments.ConditionsFragment.ConditionsAdapter.ViewHolder"/>
-        <variable name="viewModel" type="com.example.weather.viewModels.DetailedConditionsViewModel"/>
+        <variable name="viewHolder" type="com.companyname.weather.fragments.ConditionsFragment.ConditionsAdapter.ViewHolder"/>
+        <variable name="viewModel" type="com.companyname.weather.viewModels.DetailedConditionsViewModel"/>
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -15,10 +15,12 @@
         style="@style/Widget.MaterialComponents.CardView"
         app:strokeWidth="1dp"
         app:strokeColor="@color/primaryDarkColor"
+        app:cardCornerRadius="@dimen/card_corner_radius"
         app:cardBackgroundColor="@{context.getColor(viewModel.details.backgroundColor)}"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="@{viewHolder::onClick}">
+        android:onClick="@{viewHolder::onClick}"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

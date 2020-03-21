@@ -10,7 +10,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.example.weather3"
+        applicationId "com.companyname.weather3"
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1

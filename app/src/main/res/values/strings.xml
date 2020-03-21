@@ -7,7 +7,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Forecast</string>
-    <string name="nav_header_subtitle">forecast@example.com</string>
+    <string name="nav_header_subtitle">forecast@companyname.com</string>
     <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_forecast">Forecast</string>

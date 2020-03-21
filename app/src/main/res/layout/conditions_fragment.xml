@@ -5,13 +5,13 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="locationViewModel" type="com.example.weather.viewModels.LocationViewModel"/>
-        <variable name="conditionsViewModel" type="com.example.weather.viewModels.ConditionsViewModel"/>
+        <variable name="locationViewModel" type="com.companyname.weather.viewModels.LocationViewModel"/>
+        <variable name="conditionsViewModel" type="com.companyname.weather.viewModels.ConditionsViewModel"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/conditionsFragment"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryLightColor">
 

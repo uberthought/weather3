@@ -9,7 +9,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/conditionsFragment"
-        android:name="com.example.weather.fragments.ConditionsFragment"
+        android:name="com.companyname.weather.fragments.ConditionsFragment"
         android:tag="PortraitConditionsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"

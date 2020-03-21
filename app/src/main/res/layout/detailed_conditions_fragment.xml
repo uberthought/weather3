@@ -6,18 +6,20 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
-        <variable name="fragment" type="com.example.weather.fragments.DetailedConditionsFragment"/>
-        <variable name="viewModel" type="com.example.weather.viewModels.DetailedConditionsViewModel"/>
+        <variable name="fragment" type="com.companyname.weather.fragments.DetailedConditionsFragment"/>
+        <variable name="viewModel" type="com.companyname.weather.viewModels.DetailedConditionsViewModel"/>
     </data>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/conditionsCard"
             style="@style/Widget.MaterialComponents.CardView"
             app:strokeWidth="1dp"
+            app:cardCornerRadius="@dimen/card_corner_radius"
             app:strokeColor="@color/primaryDarkColor"
             app:cardBackgroundColor="@{context.getColor(viewModel.details.backgroundColor)}"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

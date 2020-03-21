@@ -8,46 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:824171647194:android:8308d8cf75980d201915e3",
-        "android_client_info": {
-          "package_name": "com.companyname.weather"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "824171647194-pr713g91v14r531aed3rcviabvatca59.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.companyname.weather",
-            "certificate_hash": "6158861f0b8f495e3793b8a6f9c7c311ee653484"
-          }
-        },
-        {
-          "client_id": "824171647194-a2rrf02fd3oo4smia0sci3ag8i7f30me.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCQC9A_3tMcE70b0GfCg1YcnCj-gXAaGvE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "824171647194-a2rrf02fd3oo4smia0sci3ag8i7f30me.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:824171647194:android:2cf61f6f29b65fd31915e3",
         "android_client_info": {
-          "package_name": "com.companyname.weather3"
+          "package_name": "com.example.weather3"
         }
       },
       "oauth_client": [
@@ -55,7 +18,7 @@
           "client_id": "824171647194-mjcau76hc4gnpfuvn2bubqitjmfp0dfb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.companyname.weather3",
+            "package_name": "com.example.weather3",
             "certificate_hash": "6158861f0b8f495e3793b8a6f9c7c311ee653484"
           }
         },

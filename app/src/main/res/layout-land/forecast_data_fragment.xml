@@ -16,7 +16,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/conditionsFragment"
-        android:name="com.example.weather.fragments.ConditionsFragment"
+        android:name="com.companyname.weather.fragments.ConditionsFragment"
         android:tag="LandscapeConditionsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,12 +26,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constrainedWidth="true"
         app:layout_constrainedHeight="true"
-        android:padding="@dimen/padding"
         />
+<!--    android:padding="@dimen/padding"-->
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/detailedConditionsFragment"
-        android:name="com.example.weather.fragments.DetailedConditionsFragment"
+        android:name="com.companyname.weather.fragments.DetailedConditionsFragment"
         android:tag="LandscapeDetailedConditionsFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constrainedWidth="true"
         app:layout_constrainedHeight="true"
-        android:padding="@dimen/padding"
         />
+<!--    android:padding="@dimen/padding"-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

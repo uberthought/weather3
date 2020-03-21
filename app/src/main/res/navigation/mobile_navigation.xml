@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_forecast"
-        android:name="com.example.weather.fragments.ForecastFragment"
+        android:name="com.companyname.weather.fragments.ForecastFragment"
         android:label="@string/menu_forecast"
         tools:layout="@layout/forecast_fragment" />
 
     <fragment
         android:id="@+id/nav_map"
-        android:name="com.example.weather.fragments.MapFragment"
+        android:name="com.companyname.weather.fragments.MapFragment"
         android:label="@string/menu_map"
         tools:layout="@layout/map_fragment" />
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.example.weather.fragments.SettingsFragment"
+        android:name="com.companyname.weather.fragments.SettingsFragment"
         android:label="@string/menu_settings"
         tools:layout="@layout/settings_fragment" />
 </navigation>
