@@ -77,7 +77,10 @@ class DetailedConditionsFragment : Fragment() {
     }
 
     fun onClick(view:View) {
-        if (tag == "PortraitDetailedConditionsFragment")
-            activity?.onBackPressed()
+        if (tag == "PortraitDetailedConditionsFragment") {
+            parentFragmentManager.beginTransaction()
+                .remove(this)
+                .commit()
+        }
     }
 }

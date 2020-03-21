@@ -9,7 +9,8 @@ class LocationViewModel : ViewModel() {
         MutableLiveData()
 
     init {
-        NWSService.instance.location.observeForever { location -> onLocationChanged(location) } }
+        NWSService.instance.location.observeForever { location -> onLocationChanged(location) }
+    }
 
     private fun onLocationChanged(location: String?) {
         this.location.postValue(location)

@@ -1,6 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
+    Theme.AppCompat.Light.DarkActionBar
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <!-- Customize your theme here. -->
         <item name="android:colorPrimary">@color/primaryColor</item>
@@ -9,6 +10,12 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/TextAppearance.MaterialComponents.Body1</item>
+    </style>
+
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>

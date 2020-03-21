@@ -2,7 +2,6 @@ package com.example.weather.services
 
 import android.annotation.SuppressLint
 import android.location.Location
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.weather.services.nws.NWSGridPointsForecast
 import com.example.weather.services.nws.NWSPoints
@@ -18,8 +17,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class NWSService {
-    private val logTag = javaClass.kotlin.simpleName
-
     companion object {
         val instance = NWSService()
 
@@ -76,37 +73,40 @@ class NWSService {
     }
 
     fun setLocation(location: Location) {
-        Log.d(logTag, "got update from location service")
+        val logService = LogService()
+
+        logService.addMessage("got update from location service")
         if (lastLocation == null || lastLocation!!.distanceTo(location) > 100  ) {
-            Log.d(logTag, "refreshing since the location changes by greater than 100m")
+            logService.addMessage("refreshing since the location changes by greater than 100m")
+            logService.addEvent("nws_location", "changed")
             lastLocation = Location(location)
             stationId = null
             timestamp = 0
             GlobalScope.launch { refresh() }
         }
         else
-            Log.d(logTag, "not refreshing since the location changes by at less than 100m")
-
+            logService.addMessage("not refreshing since the location changes by at less than 100m")
     }
 
     suspend fun refresh() {
-        Log.d(logTag, "starting NWS refresh")
+        val logService = LogService()
+        logService.addMessage("starting NWS refresh")
 
         mutex.withLock {
             val duration = Date().time - timestamp
             if (duration > 1000 * 60 * refreshInterval) {
                 timestamp = Date().time
                 if ((lastLocation != null)) {
-                    Log.d(logTag, "starting refresh")
+                    logService.addEvent("nws_refresh", "refreshing")
                     getStation()
                     getConditions()
                     getForecast()
                 }
                 else
-                    Log.d(logTag, "skipping refresh because location isn't set")
+                    logService.addMessage("skipping refresh because location isn't set")
             }
             else
-                Log.d(logTag, "skipping refresh because refreshing too soon")
+                logService.addMessage("skipping refresh because refreshing too soon")
         }
     }
 

@@ -1,7 +1,6 @@
 package com.example.weather.services
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,7 +26,7 @@ class FileCachingService   {
                 val cacheFile = File(cacheDir, fileName)
 
                 if (!cacheFile.exists()) {
-                    LogService().add("caching_file", cacheFile.absolutePath)
+                    LogService().addData("caching_file", cacheFile.absolutePath)
                     cacheFile.parent?.let { File(it).mkdirs() }
 
                     URL(link).openStream().use { input ->

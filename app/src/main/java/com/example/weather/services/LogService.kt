@@ -14,20 +14,30 @@ class LogService {
         }
     }
 
-    private val enableFirebase: Boolean = false
+    private val enableAnalytics: Boolean = true
 
     var bundle = Bundle()
 
-    fun add(tag:String, message:String) {
+    fun addMessage(message:String) {
         val logTag = Thread.currentThread().stackTrace[3].fileName.split('.')[0]
-        Log.d(logTag, "$tag = $message")
+        Log.d(logTag, message)
+    }
 
-        if (enableFirebase)
-            bundle.putString(tag, message)
+    fun addData(name:String, value:String) {
+        val logTag = Thread.currentThread().stackTrace[3].fileName.split('.')[0]
+        Log.d(logTag, "$name = $value")
+    }
+
+    fun addEvent(name:String, message:String) {
+        val logTag = Thread.currentThread().stackTrace[3].fileName.split('.')[0]
+        Log.d(logTag, "$name = $message")
+
+        if (enableAnalytics)
+            bundle.putString(name, message)
     }
 
     protected fun finalize() {
-        if (enableFirebase) {
+        if (enableAnalytics) {
             if (bundle.size() == 0) return
 
             firebaseAnalytics?.let {
